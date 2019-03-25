@@ -26,12 +26,6 @@ valid for it.
 A third part of project "Piper" is this test repository, containing parts of the integration test
 control flow. This control flow scripts have an own lifecycle and should not be part of the 
 library but are an important part of the project "Piper" ecosystem.
-In addition this repository will contain test projects in orphand branches as input for the  different
-test steps.
-
-|branch|test scenario|description|
-|------|-------------|-----------|
-| ... | ... | ... |
 
 Here you can find the corresponding [test cases][consumer-tests]
 
