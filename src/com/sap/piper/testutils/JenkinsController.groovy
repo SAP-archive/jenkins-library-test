@@ -43,9 +43,11 @@ class JenkinsController implements Serializable {
 
     //Trigger scanning of the multi branch builds
     def buildJob(String jobName) {
-        script.sh """COOKIEJAR="\$(mktemp)"
-                    CRUMB=\$(curl -u "admin:$adminPassword" --cookie-jar "\$COOKIEJAR" "${jenkinsUrl}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,%22:%22,//crumb)")
-                    curl -s -X POST --cookie "\$COOKIEJAR" -H "\$CRUMB" --user \"admin:$adminPassword\" ${jenkinsUrl}/job/${URLEncoder.encode(jobName, 'UTF-8')}/build"""
+        script.sh """INITIAL_CREDENTIALS=$(docker logs cx-jenkins-master 2>&1 | grep "Default credentials for Jenkins")
+                    ADMIN_PASSWORD=$(echo \$INITIAL_CREDENTIALS | cut -c 63-)
+                    COOKIEJAR="\$(mktemp)"
+                    CRUMB=\$(curl -u "admin:\$ADMIN_PASSWORD" --cookie-jar "\$COOKIEJAR" "${jenkinsUrl}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,%22:%22,//crumb)")
+                    curl -s -X POST --cookie "\$COOKIEJAR" -H "\$CRUMB" --user \"admin:\$ADMIN_PASSWORD\" ${jenkinsUrl}/job/${URLEncoder.encode(jobName, 'UTF-8')}/build"""
     }
 
     def waitForSuccess(String jobName, String branch) {
