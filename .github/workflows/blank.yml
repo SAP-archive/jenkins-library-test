@@ -1,0 +1,24 @@
+name: CI
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: "5 4 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        archetype: [spring, tomee]
+    steps:
+    - name: Generate test project
+      run: |
+        mvn archetype:generate -B -DarchetypeGroupId=com.sap.cloud.sdk.archetypes -DgroupId=mydemo -DartifactId=cloud-sdk-${{ matrix.archetype }}-archetype -DskipUsageAnalytics=true -Dversion=1.0.0-SNAPSHOT -DarchetypeArtifactId=scp-cf-${{ matrix.archetype }} -DarchetypeVersion=LATEST
+        cd cloud-sdk-${{ matrix.archetype }}-archetype
+    - uses: SAP/project-piper-action@master
+      with:
+        command: mavenBuild
+        piper-version: master
