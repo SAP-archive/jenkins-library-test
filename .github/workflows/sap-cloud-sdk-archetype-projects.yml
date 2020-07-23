@@ -1,0 +1,44 @@
+name: CI
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: "5 4 * * *"
+  workflow_dispatch:
+
+jobs:
+  test-sdk-archetype:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        archetype: ['cf-spring', 'cf-tomee', 'neo-javaee7']
+        java: [ '8', '11', '14' ]
+    steps:
+    - name: Setup java
+      uses: joschi/setup-jdk@v2
+      with:
+        java-version: ${{ matrix.java }}
+        architecture: x64
+    - run: mvn -v
+    - name: Generate test project
+      run: |
+        mvn archetype:generate -B -DarchetypeGroupId=com.sap.cloud.sdk.archetypes -DgroupId=mydemo -DartifactId=cloud-sdk-${{ matrix.archetype }}-archetype -DskipUsageAnalytics=true -Dversion=1.0.0-SNAPSHOT -DarchetypeArtifactId=scp-${{ matrix.archetype }} -DarchetypeVersion=LATEST
+        cp -r cloud-sdk-${{ matrix.archetype }}-archetype/* .
+        rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
+    - uses: SAP/project-piper-action@master
+      with:
+        command: mavenBuild
+        piper-version: master
+
+
+    - name: Notify on failure
+      if: failure()
+      env:
+        WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        MESSAGE: "Piper canary pipeline for sdk archetype ${{ matrix.archetype }} on java ${{ matrix.java }} failed, see https://github.com/SAP/jenkins-library-test/actions for details."
+        CHANNEL: ${{ secrets.CHANNEL }}
+        ICON: ${{ secrets.ICON }}
+        USERNAME: Testing Bot
+      uses: svikramjeet/git-actions@master
