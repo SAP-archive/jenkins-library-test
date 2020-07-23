@@ -58,8 +58,12 @@ jobs:
       - run: docker run -d --name=nexus -p 8081:8081 -e NEXUS_SECURITY_RANDOMPASSWORD=false sonatype/nexus3:latest
       - run: until curl --fail http://localhost:8081/service/rest/v1/status; do sleep 5; done
 
-      - uses: SAP/project-piper-action@master
+      - name: Upload artifact to nexus
+        uses: SAP/project-piper-action@master
         with:
           command: nexusUpload
           flags: '--user=admin --password=admin123 --mavenRepository=maven-releases --url=http://localhost:8081'
           piper-version: master
+
+      - name: Check if uploaded artifact can be downloaded
+        run: wget http://localhost:8081/repository/maven-releases/mydemo/cloud-sdk-cf-tomee-archetype-application/1.0/cloud-sdk-cf-tomee-archetype-application-1.0.war
