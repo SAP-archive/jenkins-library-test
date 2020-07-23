@@ -16,34 +16,34 @@ jobs:
         archetype: ['cf-spring', 'cf-tomee', 'neo-javaee7']
         java: [ '8', '11', '14' ]
     steps:
-    - name: Setup java
-      uses: joschi/setup-jdk@v2
-      with:
-        java-version: ${{ matrix.java }}
-        architecture: x64
-    - run: mvn -v
-    - name: Generate test project
-      run: |
-        mvn archetype:generate -B -DarchetypeGroupId=com.sap.cloud.sdk.archetypes -DgroupId=mydemo -DartifactId=cloud-sdk-${{ matrix.archetype }}-archetype -DskipUsageAnalytics=true -Dversion=1.0 -DarchetypeArtifactId=scp-${{ matrix.archetype }} -DarchetypeVersion=LATEST
-        cp -r cloud-sdk-${{ matrix.archetype }}-archetype/* .
-        rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
-    - uses: SAP/project-piper-action@master
-      with:
-        command: mavenBuild
-        piper-version: master
-    - name: Notify on failure
-      if: failure()
-      env:
-        WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-        MESSAGE: "Piper canary pipeline for sdk archetype ${{ matrix.archetype }} on java ${{ matrix.java }} failed, see https://github.com/SAP/jenkins-library-test/actions for details."
-        CHANNEL: ${{ secrets.CHANNEL }}
-        ICON: ${{ secrets.ICON }}
-        USERNAME: Testing Bot
-      uses: svikramjeet/git-actions@master
-    - uses: 'actions/upload-artifact@v2'
-      with:
-          name: workspace ${{ matrix.archetype }} ${{ matrix.java }}
-          path: ${{ github.workspace }}
+      - name: Setup java
+        uses: joschi/setup-jdk@v2
+        with:
+          java-version: ${{ matrix.java }}
+          architecture: x64
+      - run: mvn -v
+      - name: Generate test project
+        run: |
+          mvn archetype:generate -B -DarchetypeGroupId=com.sap.cloud.sdk.archetypes -DgroupId=mydemo -DartifactId=cloud-sdk-${{ matrix.archetype }}-archetype -DskipUsageAnalytics=true -Dversion=1.0 -DarchetypeArtifactId=scp-${{ matrix.archetype }} -DarchetypeVersion=LATEST
+          cp -r cloud-sdk-${{ matrix.archetype }}-archetype/* .
+          rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
+      - uses: SAP/project-piper-action@master
+        with:
+          command: mavenBuild
+          piper-version: master
+      - name: Notify on failure
+        if: failure()
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          MESSAGE: "Piper canary test for sdk archetype ${{ matrix.archetype }} on java ${{ matrix.java }} failed, see https://github.com/SAP/jenkins-library-test/actions for details."
+          CHANNEL: ${{ secrets.CHANNEL }}
+          ICON: ${{ secrets.ICON }}
+          USERNAME: Testing Bot
+        uses: svikramjeet/git-actions@master
+      - uses: 'actions/upload-artifact@v2'
+        with:
+            name: workspace ${{ matrix.archetype }} ${{ matrix.java }}
+            path: ${{ github.workspace }}
 
   nexus:
     runs-on: ubuntu-latest
@@ -57,13 +57,19 @@ jobs:
       - run: find .
       - run: docker run -d --name=nexus -p 8081:8081 -e NEXUS_SECURITY_RANDOMPASSWORD=false sonatype/nexus3:latest
       - run: until curl --fail http://localhost:8081/service/rest/v1/status; do sleep 5; done
-
       - name: Upload artifact to nexus
         uses: SAP/project-piper-action@master
         with:
           command: nexusUpload
           flags: '--user=admin --password=admin123 --mavenRepository=maven-releases --url=http://localhost:8081'
           piper-version: master
-
       - name: Check if uploaded artifact can be downloaded
         run: wget http://localhost:8081/repository/maven-releases/mydemo/cloud-sdk-cf-tomee-archetype-application/1.0/cloud-sdk-cf-tomee-archetype-application-1.0.war
+      - name: Notify on failure
+        if: failure()
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          MESSAGE: "Piper canary test for nexus upload failed, see https://github.com/SAP/jenkins-library-test/actions for details."
+          CHANNEL: ${{ secrets.CHANNEL }}
+          ICON: ${{ secrets.ICON }}
+          USERNAME: Testing Bot
