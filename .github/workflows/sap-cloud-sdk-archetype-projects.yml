@@ -30,3 +30,13 @@ jobs:
       with:
         command: mavenBuild
         piper-version: master
+
+    - name: Notify on failure
+      if: failure()
+      env:
+        WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        MESSAGE: "Piper canary pipeline for sdk archetype ${{ matrix.archetype }} on java ${{ matrix.java }} failed"
+        CHANNEL: ${{ secrets.CHANNEL }}
+        ICON: ${{ secrets.ICON }}
+        USERNAME: Testing Bot
+      uses: svikramjeet/git-actions@master
