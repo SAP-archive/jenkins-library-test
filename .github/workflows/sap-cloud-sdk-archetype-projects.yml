@@ -35,7 +35,7 @@ jobs:
       if: failure()
       env:
         WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-        MESSAGE: "Piper canary pipeline for sdk archetype ${{ matrix.archetype }} on java ${{ matrix.java }} failed"
+        MESSAGE: "Piper canary pipeline for sdk archetype ${{ matrix.archetype }} on java ${{ matrix.java }} failed, see https://github.com/SAP/jenkins-library-test/actions for details."
         CHANNEL: ${{ secrets.CHANNEL }}
         ICON: ${{ secrets.ICON }}
         USERNAME: Testing Bot
