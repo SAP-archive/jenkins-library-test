@@ -6,6 +6,7 @@ on:
     branches: [ master ]
   schedule:
     - cron: "5 4 * * *"
+  workflow_dispatch:
 
 jobs:
   test-sdk-archetype:
@@ -28,7 +29,7 @@ jobs:
         rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
     - uses: SAP/project-piper-action@master
       with:
-        command: mavenBuildasd
+        command: mavenBuild
         piper-version: master
 
     - name: Notify on failure
