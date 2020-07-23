@@ -24,7 +24,7 @@ jobs:
     - run: mvn -v
     - name: Generate test project
       run: |
-        mvn archetype:generate -B -DarchetypeGroupId=com.sap.cloud.sdk.archetypes -DgroupId=mydemo -DartifactId=cloud-sdk-${{ matrix.archetype }}-archetype -DskipUsageAnalytics=true -Dversion=1.0.0-SNAPSHOT -DarchetypeArtifactId=scp-${{ matrix.archetype }} -DarchetypeVersion=LATEST
+        mvn archetype:generate -B -DarchetypeGroupId=com.sap.cloud.sdk.archetypes -DgroupId=mydemo -DartifactId=cloud-sdk-${{ matrix.archetype }}-archetype -DskipUsageAnalytics=true -Dversion=1.0 -DarchetypeArtifactId=scp-${{ matrix.archetype }} -DarchetypeVersion=LATEST
         cp -r cloud-sdk-${{ matrix.archetype }}-archetype/* .
         rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
     - uses: SAP/project-piper-action@master
