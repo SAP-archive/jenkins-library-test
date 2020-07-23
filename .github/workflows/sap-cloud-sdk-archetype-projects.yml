@@ -28,7 +28,7 @@ jobs:
         rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
     - uses: SAP/project-piper-action@master
       with:
-        command: mavenBuild
+        command: mavenBuildasd
         piper-version: master
 
     - name: Notify on failure
