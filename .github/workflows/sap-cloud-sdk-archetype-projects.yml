@@ -9,6 +9,7 @@ jobs:
   test-sdk-archetype:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         archetype: ['cf-spring', 'cf-tomee', 'neo-javaee7']
         java: [ '8', '11', '14' ]
