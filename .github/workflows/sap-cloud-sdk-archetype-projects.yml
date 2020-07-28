@@ -33,7 +33,7 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: mavenExecuteStaticCodeChecks
-          piper-version: master
+          piper-version: devel:SAP:jenkins-library:java11
       - name: Notify on failure
         if: failure()
         env:
