@@ -28,7 +28,8 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: mavenBuild
-          piper-version: master
+          piper-version: master   
+      - run: mvn --file integration-tests/pom.xml -Dsurefire.rerunFailingTestsCount=2 -Dsurefire.forkCount=3 --batch-mode org.jacoco:jacoco-maven-plugin:prepare-agent test
       - name: mavenExecuteStaticCodeChecks
         uses: SAP/project-piper-action@master
         with:
