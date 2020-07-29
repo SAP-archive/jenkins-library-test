@@ -70,6 +70,8 @@ jobs:
 
       - run: find .
 
+      - run: sudo npm install -g mbt
+
       - name: mtaBuild
         uses: SAP/project-piper-action@master
         with:
