@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        archetype: [ 'cf-tomee']
+        archetype: ['cf-spring', 'cf-tomee']
         java: [ '8', '11' ]
     steps:
       - name: Setup java
@@ -66,7 +66,8 @@ jobs:
           mvn archetype:generate -B -DarchetypeGroupId=com.sap.cloud.sdk.archetypes -DgroupId=mydemo -DartifactId=cloud-sdk-${{ matrix.archetype }}-archetype -DskipUsageAnalytics=true -Dversion=1.0 -DarchetypeArtifactId=scp-${{ matrix.archetype }} -DarchetypeVersion=LATEST
           cp -r cloud-sdk-${{ matrix.archetype }}-archetype/* .
           rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
-          wget https://gist.githubusercontent.com/fwilhe/0bc0848e9cc2487114c3c96060acbfc7/raw/4ebf0c4234cceb7eb9fdbb769ee8734a404c11c1/mta.yaml
+          wget https://gist.githubusercontent.com/fwilhe/0bc0848e9cc2487114c3c96060acbfc7/raw/2639331f9a1502c487000017f7b70db25b825ff6/mta-${{ matrix.archetype }}.yaml
+          mv mta*yaml mta.yaml
 
       - run: find .
 
