@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        archetype: ['cf-spring', 'cf-tomee']
+        archetype: [ 'cf-tomee']
         java: [ '8', '11' ]
     steps:
       - name: Setup java
