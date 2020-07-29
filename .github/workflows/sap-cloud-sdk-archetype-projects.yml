@@ -50,16 +50,11 @@ jobs:
 
   test-sdk-mta:
     runs-on: ubuntu-latest
+    container: devxci/mbtci:1.0.15
     strategy:
       matrix:
         archetype: ['cf-spring', 'cf-tomee']
-        java: [ '8', '11' ]
     steps:
-      - name: Setup java
-        uses: joschi/setup-jdk@v2
-        with:
-          java-version: ${{ matrix.java }}
-          architecture: x64
       - run: mvn -v
       - name: Generate test project
         run: |
@@ -69,8 +64,6 @@ jobs:
           wget https://gist.githubusercontent.com/fwilhe/0bc0848e9cc2487114c3c96060acbfc7/raw/4ebf0c4234cceb7eb9fdbb769ee8734a404c11c1/mta.yaml
 
       - run: find .
-
-      - run: sudo npm install -g mbt
 
       - name: mtaBuild
         uses: SAP/project-piper-action@master
