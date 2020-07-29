@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         archetype: ['cf-spring', 'cf-tomee', 'neo-javaee7']
-        java: [ '8', '11', '14' ]
+        java: [ '8', '11' ]
     steps:
       - name: Setup java
         uses: joschi/setup-jdk@v2
@@ -47,6 +47,36 @@ jobs:
         with:
             name: workspace ${{ matrix.archetype }} ${{ matrix.java }}
             path: ${{ github.workspace }}
+
+  test-sdk-mta:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        archetype: ['cf-spring', 'cf-tomee']
+        java: [ '8', '11' ]
+    steps:
+      - name: Setup java
+        uses: joschi/setup-jdk@v2
+        with:
+          java-version: ${{ matrix.java }}
+          architecture: x64
+      - run: mvn -v
+      - name: Generate test project
+        run: |
+          mvn archetype:generate -B -DarchetypeGroupId=com.sap.cloud.sdk.archetypes -DgroupId=mydemo -DartifactId=cloud-sdk-${{ matrix.archetype }}-archetype -DskipUsageAnalytics=true -Dversion=1.0 -DarchetypeArtifactId=scp-${{ matrix.archetype }} -DarchetypeVersion=LATEST
+          cp -r cloud-sdk-${{ matrix.archetype }}-archetype/* .
+          rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
+          rm -rf unit-tests
+          sed '/<module>unit-tests</module>$/d' pom.xml
+          wget https://gist.githubusercontent.com/fwilhe/0bc0848e9cc2487114c3c96060acbfc7/raw/4ebf0c4234cceb7eb9fdbb769ee8734a404c11c1/mta.yaml
+
+      - run: find .
+
+      - name: mtaBuild
+        uses: SAP/project-piper-action@master
+        with:
+          command: mtaBuild
+          piper-version: master
 
   nexus:
     runs-on: ubuntu-latest
