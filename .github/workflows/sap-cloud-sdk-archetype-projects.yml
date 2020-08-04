@@ -9,9 +9,10 @@ jobs:
   test-sdk-archetype:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         archetype: ['cf-spring', 'cf-tomee', 'neo-javaee7']
-        java: [ '8', '11', '14' ]
+        java: [ '8', '11' ]
     steps:
       - name: Setup java
         uses: joschi/setup-jdk@v2
@@ -29,6 +30,12 @@ jobs:
         with:
           command: mavenBuild
           piper-version: master
+      - name: mavenExecuteIntegration
+        uses: SAP/project-piper-action@master
+        with:
+          command: mavenExecuteIntegration
+          piper-version: master
+
       - name: mavenExecuteStaticCodeChecks
         uses: SAP/project-piper-action@master
         with:
