@@ -66,11 +66,10 @@ jobs:
           name: workspace cf-tomee 8
           path: ${{ github.workspace }}
 
-      - run: |
-          # ...first add the Cloud Foundry Foundation public key and package repository to your system
+      - name: Install CF CLI
+        run: |
           wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
           echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          # ...then, update your local package index, then finally install the cf CLI
           sudo apt-get -y update
           sudo apt-get -y install cf-cli
 
@@ -80,7 +79,16 @@ jobs:
           command: cloudFoundryDeploy
           flags: '--password=${{ secrets.CF_PASSWORD }} --username=${{ secrets.CF_USER }}'
           piper-version: master
-          
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          MESSAGE: "Piper canary test for CF deploy failed, see https://github.com/SAP/jenkins-library-test/actions for details."
+          CHANNEL: ${{ secrets.CHANNEL }}
+          ICON: ${{ secrets.ICON }}
+          USERNAME: Testing Bot
+        uses: svikramjeet/git-actions@master
 
   nexus:
     runs-on: ubuntu-latest
