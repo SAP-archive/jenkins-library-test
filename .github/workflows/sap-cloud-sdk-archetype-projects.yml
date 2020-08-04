@@ -65,8 +65,6 @@ jobs:
           - 8081:8081
         env:
           NEXUS_SECURITY_RANDOMPASSWORD: false
-        options: --health-cmd 'curl --fail http://localhost:8081/service/rest/v1/status' --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
@@ -74,6 +72,7 @@ jobs:
           name: workspace cf-tomee 8
           path: ${{ github.workspace }}
       - run: find .
+      - run: until curl --fail http://localhost:8081/service/rest/v1/status; do sleep 5; done
       - name: Upload artifact to nexus
         uses: SAP/project-piper-action@master
         with:
@@ -82,12 +81,12 @@ jobs:
           piper-version: master
       - name: Check if uploaded artifact can be downloaded
         run: wget http://localhost:8081/repository/maven-releases/mydemo/cloud-sdk-cf-tomee-archetype-application/1.0/cloud-sdk-cf-tomee-archetype-application-1.0.war
-      - name: Notify on failure
-        if: failure()
-        env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-          MESSAGE: "Piper canary test for nexus upload failed, see https://github.com/SAP/jenkins-library-test/actions for details."
-          CHANNEL: ${{ secrets.CHANNEL }}
-          ICON: ${{ secrets.ICON }}
-          USERNAME: Testing Bot
-        uses: svikramjeet/git-actions@master
+      # - name: Notify on failure
+      #   if: failure()
+      #   env:
+      #     WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+      #     MESSAGE: "Piper canary test for nexus upload failed, see https://github.com/SAP/jenkins-library-test/actions for details."
+      #     CHANNEL: ${{ secrets.CHANNEL }}
+      #     ICON: ${{ secrets.ICON }}
+      #     USERNAME: Testing Bot
+      #   uses: svikramjeet/git-actions@master
