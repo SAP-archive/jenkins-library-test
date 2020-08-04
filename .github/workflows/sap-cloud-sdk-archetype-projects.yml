@@ -41,6 +41,15 @@ jobs:
         with:
           command: mavenExecuteStaticCodeChecks
           piper-version: master
+
+      - name: cloudFoundryDeploy
+        uses: SAP/project-piper-action@master
+        with:
+          command: cloudFoundryDeploy
+          flags: '--password=${{ secrets.CF_PASSWORD }} --username=${{ secrets.CF_USER }}'
+          piper-version: master
+
+
       - name: Notify on failure
         if: failure()
         env:
