@@ -59,7 +59,6 @@ jobs:
 
   cloudFoundryDeploy:
     runs-on: ubuntu-latest
-    container: ppiper/cf-cli
     needs: test-sdk-archetype
     steps:
       - uses: actions/checkout@v2
@@ -67,6 +66,15 @@ jobs:
         with:
           name: workspace cf-tomee 8
           path: ${{ github.workspace }}
+
+      - run: |
+          # ...first add the Cloud Foundry Foundation public key and package repository to your system
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          # ...then, update your local package index, then finally install the cf CLI
+          sudo apt-get -y update
+          sudo apt-get -y install cf-cli
+
       - name: cloudFoundryDeploy
         uses: SAP/project-piper-action@master
         with:
