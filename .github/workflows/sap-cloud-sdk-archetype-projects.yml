@@ -43,14 +43,6 @@ jobs:
           command: mavenExecuteStaticCodeChecks
           piper-version: master
 
-      - name: cloudFoundryDeploy
-        uses: SAP/project-piper-action@master
-        with:
-          command: cloudFoundryDeploy
-          flags: '--password=${{ secrets.CF_PASSWORD }} --username=${{ secrets.CF_USER }}'
-          piper-version: master
-
-
       - name: Notify on failure
         if: failure()
         env:
@@ -64,6 +56,24 @@ jobs:
         with:
             name: workspace ${{ matrix.archetype }} ${{ matrix.java }}
             path: ${{ github.workspace }}
+
+  cloudFoundryDeploy:
+    runs-on: ubuntu-latest
+    container: ppiper/cf-cli
+    needs: test-sdk-archetype
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: workspace cf-tomee 8
+          path: ${{ github.workspace }}
+      - name: cloudFoundryDeploy
+        uses: SAP/project-piper-action@master
+        with:
+          command: cloudFoundryDeploy
+          flags: '--password=${{ secrets.CF_PASSWORD }} --username=${{ secrets.CF_USER }}'
+          piper-version: master
+          
 
   nexus:
     runs-on: ubuntu-latest
