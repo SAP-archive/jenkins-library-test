@@ -58,6 +58,15 @@ jobs:
   nexus:
     runs-on: ubuntu-latest
     needs: test-sdk-archetype
+    services:
+      nexus:
+        image: sonatype/nexus3:latest
+        ports:
+          - 8081:8081
+        env:
+          NEXUS_SECURITY_RANDOMPASSWORD: false
+        options: --health-cmd 'curl --fail http://localhost:8081/service/rest/v1/status' --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
@@ -65,8 +74,6 @@ jobs:
           name: workspace cf-tomee 8
           path: ${{ github.workspace }}
       - run: find .
-      - run: docker run -d --name=nexus -p 8081:8081 -e NEXUS_SECURITY_RANDOMPASSWORD=false sonatype/nexus3:latest
-      - run: until curl --fail http://localhost:8081/service/rest/v1/status; do sleep 5; done
       - name: Upload artifact to nexus
         uses: SAP/project-piper-action@master
         with:
