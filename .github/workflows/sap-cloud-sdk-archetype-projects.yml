@@ -77,18 +77,20 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: cloudFoundryDeploy
-          flags: '--password=${{ secrets.CF_PASSWORD }} --username=${{ secrets.CF_USER }}'
           piper-version: master
-
-      - name: Notify on failure
-        if: failure()
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-          MESSAGE: "Piper canary test for CF deploy failed, see https://github.com/SAP/jenkins-library-test/actions for details."
-          CHANNEL: ${{ secrets.CHANNEL }}
-          ICON: ${{ secrets.ICON }}
-          USERNAME: Testing Bot
-        uses: svikramjeet/git-actions@master
+          PIPER_username: ${{ secrets.CF_USER }}
+          PIPER_password: ${{ secrets.CF_PASSWORD }}
+
+      # - name: Notify on failure
+      #   if: failure()
+      #   env:
+      #     WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+      #     MESSAGE: "Piper canary test for CF deploy failed, see https://github.com/SAP/jenkins-library-test/actions for details."
+      #     CHANNEL: ${{ secrets.CHANNEL }}
+      #     ICON: ${{ secrets.ICON }}
+      #     USERNAME: Testing Bot
+      #   uses: svikramjeet/git-actions@master
 
   nexus:
     runs-on: ubuntu-latest
