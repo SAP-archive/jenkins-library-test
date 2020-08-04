@@ -34,7 +34,7 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: mavenExecuteIntegration
-          piper-version: devel:SAP:jenkins-library:maven-exec-it
+          piper-version: master
 
       - name: mavenExecuteStaticCodeChecks
         uses: SAP/project-piper-action@master
