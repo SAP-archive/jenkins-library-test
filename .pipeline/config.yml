@@ -4,4 +4,4 @@ steps:
     deployTool: cf_native
     org: piper
     space: infra-testing
-    
+    manifest: manifest.yml
