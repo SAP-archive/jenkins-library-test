@@ -1,0 +1,7 @@
+steps:
+  cloudFoundryDeploy:
+    apiEndpoint: 'https://api.cf.eu10.hana.ondemand.com'
+    deployTool: cf_native
+    org: piper
+    space: infra-testing
+    
