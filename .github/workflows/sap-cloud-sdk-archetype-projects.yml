@@ -79,6 +79,13 @@ jobs:
           command: mtaBuild
           piper-version: master
 
+      - name: mtaBuild
+        uses: SAP/project-piper-action@master
+        with:
+          command: mavenExecuteIntegration
+          piper-version: master
+
+
   # nexus:
   #   runs-on: ubuntu-latest
   #   needs: test-sdk-archetype
