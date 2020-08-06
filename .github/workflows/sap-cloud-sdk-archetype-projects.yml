@@ -51,6 +51,7 @@ jobs:
   test-sdk-mta:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         archetype: ['cf-spring', 'cf-tomee']
         java: [ '8', '11' ]
@@ -77,9 +78,10 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: mtaBuild
+          flags: "--installArtifacts"
           piper-version: master
 
-      - name: mtaBuild
+      - name: mavenExecuteIntegration
         uses: SAP/project-piper-action@master
         with:
           command: mavenExecuteIntegration
