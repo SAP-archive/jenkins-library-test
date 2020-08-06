@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        archetype: ['cf-spring', 'cf-tomee', 'neo-javaee7']
-        java: [ '8', '11' ]
+        archetype: ['cf-spring']
+        java: [ '8']
     steps:
       - name: Setup java
         uses: joschi/setup-jdk@v2
@@ -26,19 +26,14 @@ jobs:
           cp -r cloud-sdk-${{ matrix.archetype }}-archetype/* .
           rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
       - name: mavenBuild
-        uses: SAP/project-piper-action@master
+        uses: SAP/project-piper-action@kotlin-poc
         with:
           command: mavenBuild
-          piper-version: kotlin-poc
       - name: mavenExecuteIntegration
-        uses: SAP/project-piper-action@master
+        uses: SAP/project-piper-action@kotlin-poc
         with:
           command: mavenExecuteIntegration
-          piper-version: kotlin-poc
-
       - name: mavenExecuteStaticCodeChecks
-        uses: SAP/project-piper-action@master
+        uses: SAP/project-piper-action@kotlin-poc
         with:
           command: mavenExecuteStaticCodeChecks
-          piper-version: kotlin-poc
- 
