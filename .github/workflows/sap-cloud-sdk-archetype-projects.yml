@@ -76,6 +76,13 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: mtaBuild
+          flags: "--installArtifacts"
+          piper-version: master
+
+      - name: mavenExecuteIntegration
+        uses: SAP/project-piper-action@master
+        with:
+          command: mavenExecuteIntegration
           piper-version: master
 
   test-sdk-mta-js:
@@ -92,14 +99,8 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: mtaBuild
-          flags: "--installArtifacts"
           piper-version: master
 
-      - name: mavenExecuteIntegration
-        uses: SAP/project-piper-action@master
-        with:
-          command: mavenExecuteIntegration
-          piper-version: master
 
 
   # nexus:
