@@ -70,7 +70,21 @@ jobs:
           wget https://gist.githubusercontent.com/fwilhe/0bc0848e9cc2487114c3c96060acbfc7/raw/2639331f9a1502c487000017f7b70db25b825ff6/mta-${{ matrix.archetype }}.yaml
           mv mta*yaml mta.yaml
 
-      - run: find .
+      - run: curl -L "https://github.com/SAP/cloud-mta-build-tool/releases/download/v1.0.15/cloud-mta-build-tool_1.0.15_Linux_amd64.tar.gz" | sudo tar -zx -C /usr/local/bin
+
+      - name: mtaBuild
+        uses: SAP/project-piper-action@master
+        with:
+          command: mtaBuild
+          piper-version: master
+
+  test-sdk-mta-js:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          wget https://github.com/SAP/cloud-s4-sdk-book/archive/mta-js.zip
+          unzip mta-js.zip
+          cp -r mta-js/* .
 
       - run: curl -L "https://github.com/SAP/cloud-mta-build-tool/releases/download/v1.0.15/cloud-mta-build-tool_1.0.15_Linux_amd64.tar.gz" | sudo tar -zx -C /usr/local/bin
 
