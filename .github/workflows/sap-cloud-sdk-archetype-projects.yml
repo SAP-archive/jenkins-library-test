@@ -91,7 +91,9 @@ jobs:
       - run: |
           wget https://github.com/SAP/cloud-s4-sdk-book/archive/mta-js.zip
           unzip mta-js.zip
-          cp -r mta-js/* .
+          rm mta-js.zip
+          cp -r cloud-s4-sdk-book-mta-js/* .
+          rm -rf cloud-s4-sdk-book-mta-js
 
       - run: curl -L "https://github.com/SAP/cloud-mta-build-tool/releases/download/v1.0.15/cloud-mta-build-tool_1.0.15_Linux_amd64.tar.gz" | sudo tar -zx -C /usr/local/bin
 
