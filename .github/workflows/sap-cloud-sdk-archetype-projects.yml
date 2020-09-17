@@ -71,7 +71,7 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: nexusUpload
-          flags: '--user=admin --password=admin123 --mavenRepository=maven-releases --url=http://localhost:8081'
+          flags: '--username=admin --password=admin123 --mavenRepository=maven-releases --url=http://localhost:8081'
           piper-version: master
       - name: Check if uploaded artifact can be downloaded
         run: wget http://localhost:8081/repository/maven-releases/mydemo/cloud-sdk-cf-tomee-archetype-application/1.0/cloud-sdk-cf-tomee-archetype-application-1.0.war
