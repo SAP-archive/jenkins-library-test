@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         archetype: ['cf-spring']
-        java: [ '8', '11' ]
+        java: [ '8']
     steps:
       - name: Setup java
         uses: joschi/setup-jdk@v2
@@ -66,6 +66,8 @@ jobs:
           name: workspace cf-spring 8
           path: ${{ github.workspace }}
 
+      - run: ls -la
+
       - name: cloudFoundryDeploy
         uses: SAP/project-piper-action@install-cf-cli
         with:
@@ -74,6 +76,9 @@ jobs:
         env:
           PIPER_username: ${{ secrets.CF_USER }}
           PIPER_password: ${{ secrets.CF_PASSWORD }}
+
+
+      - run: cf -v
 
       # - name: Notify on failure
       #   if: failure()
@@ -85,26 +90,26 @@ jobs:
       #     USERNAME: Testing Bot
       #   uses: svikramjeet/git-actions@master
 
-  nexus:
-    runs-on: ubuntu-latest
-    needs: test-sdk-archetype
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: workspace cf-tomee 8
-          path: ${{ github.workspace }}
-      - run: find .
-      - run: docker run -d --name=nexus -p 8081:8081 -e NEXUS_SECURITY_RANDOMPASSWORD=false sonatype/nexus3:latest
-      - run: until curl --fail http://localhost:8081/service/rest/v1/status; do sleep 5; done
-      - name: Upload artifact to nexus
-        uses: SAP/project-piper-action@master
-        with:
-          command: nexusUpload
-          flags: '--user=admin --password=admin123 --mavenRepository=maven-releases --url=http://localhost:8081'
-          piper-version: master
-      - name: Check if uploaded artifact can be downloaded
-        run: wget http://localhost:8081/repository/maven-releases/mydemo/cloud-sdk-cf-tomee-archetype-application/1.0/cloud-sdk-cf-tomee-archetype-application-1.0.war
+  # nexus:
+  #   runs-on: ubuntu-latest
+  #   needs: test-sdk-archetype
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: workspace cf-tomee 8
+  #         path: ${{ github.workspace }}
+  #     - run: find .
+  #     - run: docker run -d --name=nexus -p 8081:8081 -e NEXUS_SECURITY_RANDOMPASSWORD=false sonatype/nexus3:latest
+  #     - run: until curl --fail http://localhost:8081/service/rest/v1/status; do sleep 5; done
+  #     - name: Upload artifact to nexus
+  #       uses: SAP/project-piper-action@master
+  #       with:
+  #         command: nexusUpload
+  #         flags: '--user=admin --password=admin123 --mavenRepository=maven-releases --url=http://localhost:8081'
+  #         piper-version: master
+  #     - name: Check if uploaded artifact can be downloaded
+  #       run: wget http://localhost:8081/repository/maven-releases/mydemo/cloud-sdk-cf-tomee-archetype-application/1.0/cloud-sdk-cf-tomee-archetype-application-1.0.war
       # - name: Notify on failure
       #   if: failure()
       #   env:
