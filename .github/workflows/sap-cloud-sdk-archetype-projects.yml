@@ -66,15 +66,8 @@ jobs:
           name: workspace cf-tomee 8
           path: ${{ github.workspace }}
 
-      - name: Install CF CLI
-        run: |
-          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          sudo apt-get -y update
-          sudo apt-get -y install cf-cli
-
       - name: cloudFoundryDeploy
-        uses: SAP/project-piper-action@master
+        uses: SAP/project-piper-action@install-cf-cli
         with:
           command: cloudFoundryDeploy
           piper-version: master
