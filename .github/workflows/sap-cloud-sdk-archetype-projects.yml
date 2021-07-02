@@ -39,15 +39,6 @@ jobs:
         with:
           command: mavenExecuteStaticCodeChecks
           piper-version: master
-      - name: Notify on failure
-        if: failure()
-        env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-          MESSAGE: "Piper canary test for sdk archetype ${{ matrix.archetype }} on java ${{ matrix.java }} failed, see https://github.com/SAP/jenkins-library-test/actions for details."
-          CHANNEL: ${{ secrets.CHANNEL }}
-          ICON: ${{ secrets.ICON }}
-          USERNAME: Testing Bot
-        uses: svikramjeet/git-actions@master
       - uses: 'actions/upload-artifact@v2'
         with:
             name: workspace ${{ matrix.archetype }} ${{ matrix.java }}
@@ -73,12 +64,4 @@ jobs:
           piper-version: master
       - name: Check if uploaded artifact can be downloaded
         run: wget http://localhost:8081/repository/maven-releases/mydemo/cloud-sdk-cf-tomee-archetype-application/1.0/cloud-sdk-cf-tomee-archetype-application-1.0.war
-      - name: Notify on failure
-        if: failure()
-        env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-          MESSAGE: "Piper canary test for nexus upload failed, see https://github.com/SAP/jenkins-library-test/actions for details."
-          CHANNEL: ${{ secrets.CHANNEL }}
-          ICON: ${{ secrets.ICON }}
-          USERNAME: Testing Bot
-        uses: svikramjeet/git-actions@master
+
