@@ -1,8 +1,6 @@
 name: CI
 on:
   push:
-  schedule:
-    - cron: "5 4 * * *"
   workflow_dispatch:
 
 jobs:
@@ -65,7 +63,7 @@ jobs:
           name: workspace cf-tomee 8
           path: ${{ github.workspace }}
       - run: find .
-      - run: docker run -d --name=nexus -p 8081:8081 -e NEXUS_SECURITY_RANDOMPASSWORD=false sonatype/nexus3:latest
+      - run: docker run -d --name=nexus -p 8081:8081 -e NEXUS_SECURITY_RANDOMPASSWORD=false sonatype/nexus3:3.21.1
       - run: until curl --fail http://localhost:8081/service/rest/v1/status; do sleep 5; done
       - name: Upload artifact to nexus
         uses: SAP/project-piper-action@master
