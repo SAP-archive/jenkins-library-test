@@ -24,18 +24,18 @@ jobs:
           cp -r cloud-sdk-${{ matrix.archetype }}-archetype/* .
           rm -rf cloud-sdk-${{ matrix.archetype }}-archetype
       - name: mavenBuild
-        uses: SAP/project-piper-action@master
+        uses: SAP/project-piper-action@test
         with:
           command: mavenBuild
           piper-version: master
       - name: mavenExecuteIntegration
-        uses: SAP/project-piper-action@master
+        uses: SAP/project-piper-action@test
         with:
           command: mavenExecuteIntegration
           piper-version: master
 
       - name: mavenExecuteStaticCodeChecks
-        uses: SAP/project-piper-action@master
+        uses: SAP/project-piper-action@test
         with:
           command: mavenExecuteStaticCodeChecks
           piper-version: master
@@ -57,7 +57,7 @@ jobs:
       - run: docker run -d --name=nexus -p 8081:8081 -e NEXUS_SECURITY_RANDOMPASSWORD=false sonatype/nexus3:3.21.1
       - run: until curl --fail http://localhost:8081/service/rest/v1/status; do sleep 5; done
       - name: Upload artifact to nexus
-        uses: SAP/project-piper-action@master
+        uses: SAP/project-piper-action@test
         with:
           command: nexusUpload
           flags: '--username=admin --password=admin123 --mavenRepository=maven-releases --url=http://localhost:8081'
