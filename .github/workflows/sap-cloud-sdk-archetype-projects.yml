@@ -27,18 +27,18 @@ jobs:
         uses: SAP/project-piper-action@master
         with:
           command: mavenBuild
-          piper-version: master
+          piper-version: latest
       - name: mavenExecuteIntegration
         uses: SAP/project-piper-action@master
         with:
           command: mavenExecuteIntegration
-          piper-version: master
+          piper-version: latest
 
       - name: mavenExecuteStaticCodeChecks
         uses: SAP/project-piper-action@master
         with:
           command: mavenExecuteStaticCodeChecks
-          piper-version: master
+          piper-version: latest
       - uses: 'actions/upload-artifact@v2'
         with:
             name: workspace ${{ matrix.archetype }} ${{ matrix.java }}
@@ -61,7 +61,7 @@ jobs:
         with:
           command: nexusUpload
           flags: '--username=admin --password=admin123 --mavenRepository=maven-releases --url=http://localhost:8081'
-          piper-version: master
+          piper-version: latest
       - name: Check if uploaded artifact can be downloaded
         run: wget http://localhost:8081/repository/maven-releases/mydemo/cloud-sdk-cf-tomee-archetype-application/1.0/cloud-sdk-cf-tomee-archetype-application-1.0.war
 
