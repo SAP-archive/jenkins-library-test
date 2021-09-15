@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/SAP/jenkins-library.svg?branch=master)](https://travis-ci.org/SAP/jenkins-library)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0e6a23344616e29b4ed0/maintainability)](https://codeclimate.com/github/SAP/jenkins-library/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0e6a23344616e29b4ed0/test_coverage)](https://codeclimate.com/github/SAP/jenkins-library/test_coverage)
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP/jenkins-library-test)](https://api.reuse.software/info/github.com/SAP/jenkins-library-test)
 
 # Description
 
@@ -54,9 +55,11 @@ before opening a pull request.
 
 # [License][piper-library-test-license]
 
-Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+Copyright (c) 2019-2021 SAP SE or an SAP affiliate company. All rights reserved.
 This file is licensed under the Apache Software License, v. 2 except as noted
-otherwise in the [LICENSE file][piper-library-test-license]
+otherwise in the [LICENSE file][piper-library-test-license]. Detailed information
+including third-party components and their licensing/copyright information is
+available [via the REUSE tool][reuse-tool].
 
 [github]: https://github.com
 [piper-library]: https://github.com/SAP/jenkins-library
@@ -68,3 +71,4 @@ otherwise in the [LICENSE file][piper-library-test-license]
 [piper-library-test-license]: ./LICENSE
 [piper-library-test-contribution]: .github/CONTRIBUTING.md
 [google-group]: https://groups.google.com/forum/#!forum/project-piper
+[reuse-tool]: https://api.reuse.software/info/github.com/SAP/jenkins-library-test
